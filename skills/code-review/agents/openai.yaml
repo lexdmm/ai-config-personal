@@ -1,0 +1,4 @@
+interface:
+  display_name: "Code Review"
+  short_description: "Revisa PRs, branches e diffs com rigor técnico"
+  default_prompt: "Use $code-review para revisar o diff informado e entregar comentários prontos para o GitHub."

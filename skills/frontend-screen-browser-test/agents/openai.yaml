@@ -1,0 +1,4 @@
+interface:
+  display_name: "Frontend Screen Browser Test"
+  short_description: "Valida telas no browser com evidências para o Jira"
+  default_prompt: "Use $frontend-screen-browser-test para validar a tela informada no navegador e gerar as evidências de teste."

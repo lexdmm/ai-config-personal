@@ -1,0 +1,4 @@
+interface:
+  display_name: "Backend Test Evidence"
+  short_description: "Valida backend e gera evidências para o Jira"
+  default_prompt: "Use $backend-test-evidence para validar a mudança de backend informada e gerar as evidências de teste."

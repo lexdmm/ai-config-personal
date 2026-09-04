@@ -1,0 +1,23 @@
+# Local or private configuration
+*.local.md
+.local/
+private/
+overlays/private/
+.publication-denylist.local
+
+# Secrets and credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+credentials*
+secrets*
+
+# Generated or machine-local files
+.DS_Store
+*.log
+.cache/
