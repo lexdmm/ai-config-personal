@@ -96,6 +96,7 @@ check_orphaned_skill_links() {
 
 link "$ROOT/AGENTS.md" "$HOME/.codex/AGENTS.md"
 link "$ROOT/AGENTS.md" "$HOME/.claude/CLAUDE.md"
+link "$ROOT/rules" "$HOME/.claude/rules"
 link "$ROOT/skills" "$HOME/.claude/skills"
 link "$ROOT/claude/agents" "$HOME/.claude/agents"
 link "$ROOT/claude/commands" "$HOME/.claude/commands"

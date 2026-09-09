@@ -1,3 +1,12 @@
+---
+paths:
+  - "**/*.php"
+  - "**/composer.json"
+  - "**/phpunit.xml"
+  - "**/phpunit.xml.dist"
+  - "**/artisan"
+---
+
 # Regras específicas — PHP / Laravel
 
 Aplique junto com `universal.md`.

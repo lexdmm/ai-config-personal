@@ -1,3 +1,10 @@
+---
+paths:
+  - "**/*.ts"
+  - "**/*.tsx"
+  - "**/tsconfig*.json"
+---
+
 # Regras específicas — TypeScript, React, NestJS
 
 Aplique junto com `universal.md`. Este arquivo concentra os critérios

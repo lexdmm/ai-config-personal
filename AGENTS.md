@@ -39,43 +39,55 @@ Preencha as seções abaixo aos poucos; deixe vazio o que ainda não se aplica.
 - Ao montar um plano de desenvolvimento: dividir em etapas pequenas e
   digeríveis para a carga cognitiva do usuário, explicando jargão técnico
   de forma leiga e breve (sem verbosidade).
+- Ao apresentar um plano de desenvolvimento, incluir uma sugestão de nome de
+  branch em inglês antes das etapas. Usar letras minúsculas e `kebab-case`, no
+  formato `<tipo>/<ticket>-<descrição>`, como
+  `feature/DEV-7183-pre-boarding-journey`. Escolher o tipo conforme a natureza
+  da mudança, como `feature`, `fix`, `refactor`, `chore`, `test` ou `docs`.
+- Usar o identificador informado pelo usuário ou disponível no contexto; nunca
+  inventar um ticket. Quando não houver identificador, usar
+  `<tipo>/<descrição>`. Respeitar uma convenção mais específica do projeto,
+  quando existir.
 - Ao executar um plano já alinhado: implementar uma etapa por vez e parar.
   Só avançar para a próxima quando o usuário digitar "next".
+- Ao concluir cada etapa de desenvolvimento, encerrar a resposta com uma única
+  sugestão de mensagem de commit, sempre em inglês e limitada às alterações
+  daquela etapa. Seguir a convenção de commits do projeto; quando ela não
+  existir, preferir Conventional Commits, com descrição curta e no imperativo.
+- Apresentar a sugestão na última linha com o rótulo `Suggested commit:` e a
+  mensagem em código inline para facilitar sua cópia, como
+  Suggested commit: `feat: add pre-boarding journey`. Não usar bloco de código
+  nem acrescentar explicação nessa linha. Sugerir branch ou mensagem não
+  autoriza criar branch nem executar commit; essas ações continuam exigindo
+  confirmação explícita.
 
 ### Gate obrigatório de aceite por etapa
 
-- Em cada etapa de análise, planejamento, implementação e validação, ler e
-  aplicar integralmente todas as instruções compatíveis com o escopo:
-  - as instruções globais deste `AGENTS.md`;
-  - os critérios de `~/development/ai-config-personal/rules/universal.md`;
-  - as regras específicas presentes em `~/development/ai-config-personal/rules/` para
-    as linguagens, frameworks e tecnologias identificadas;
-  - os arquivos `AGENTS.md`, `CLAUDE.md` e `CLAUDE.local.md` do projeto, quando
-    existirem;
-  - os documentos, contratos, decisões arquiteturais e convenções locais
-    referenciados por essas fontes e relevantes para o trecho trabalhado.
-- Essas fontes formam, em conjunto, os critérios obrigatórios de aceite.
-  Nenhuma lista resumida neste arquivo substitui ou limita os critérios
-  detalhados presentes nos documentos.
-- Antes de concluir cada etapa, confrontar o resultado produzido com todos os
-  critérios aplicáveis e corrigir as violações encontradas. Isso inclui, entre
-  outros pontos, arquitetura e responsabilidades existentes, aplicação
-  pragmática de SOLID, segurança e IDOR, performance, duplicação, tratamento de
-  erros e `try/catch`, contratos, testes, efeitos colaterais e boas práticas da
-  stack.
-- Os pontos citados são exemplos recorrentes, não uma lista exaustiva. A IA deve
-  identificar os demais critérios relevantes a partir das tecnologias, camadas,
-  fluxos e riscos presentes no escopo.
-- Não aplicar mecanicamente critérios incompatíveis com o contexto, mas também
-  não descartar uma categoria sem antes verificar sua relevância no código e
-  nas instruções ativas.
-- Antes de criar regra, método ou abstração, procurar implementações equivalentes
-  no projeto. Evitar duplicação real, mas só reutilizar ou extrair quando a
-  responsabilidade e a semântica forem as mesmas; semelhança superficial não
-  justifica abstração.
-- A execução deste gate é obrigatória e silenciosa. Não reproduzir o checklist
-  na resposta, salvo quando o usuário pedir. Uma etapa só pode ser apresentada
-  como concluída depois dessa verificação.
+- No início de cada etapa, identificar as instruções aplicáveis entre este
+  `AGENTS.md`, as regras universais e da stack e os documentos locais do
+  projeto. Essas fontes formam em conjunto os critérios obrigatórios de aceite;
+  nenhuma lista resumida as substitui ou limita.
+- Antes de concluir uma etapa que alterou arquivos, inspecionar o resultado real
+  da etapa, não a intenção lembrada:
+  1. executar `git status --short`, `git diff` e `git diff --cached`;
+  2. ler também o conteúdo dos arquivos novos ainda não rastreados;
+  3. separar as alterações da etapa de mudanças preexistentes do usuário;
+  4. reabrir somente as seções das regras e dos documentos relacionadas aos
+     arquivos, camadas, fluxos e riscos efetivamente tocados;
+  5. confrontar essas regras com as linhas reais alteradas e corrigir qualquer
+     violação antes de apresentar a etapa como concluída.
+- Quando não houver repositório Git, fazer a mesma conferência diretamente nos
+  arquivos alterados. Ter lido uma regra no começo da sessão ou conseguir
+  citá-la de memória não substitui confrontá-la com o resultado atual.
+- Executar as validações proporcionais ao risco e ao escopo da etapa. Não
+  repetir testes ou verificações sem necessidade quando nenhuma mudança nova
+  puder afetar seus resultados.
+- O gate é obrigatório e silencioso quando tudo estiver correto. Se alguma
+  parte relevante não puder ser verificada, declarar a limitação; silêncio não
+  pode ser usado para afirmar uma validação que não ocorreu.
+- Só apresentar a etapa como concluída e escrever `Suggested commit:` depois
+  desse fechamento. Não reproduzir o procedimento na resposta, salvo quando o
+  usuário pedir.
 
 ### Uso de skills de code review
 

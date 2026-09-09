@@ -1,3 +1,10 @@
+---
+paths:
+  - "**/*.go"
+  - "**/go.mod"
+  - "**/go.sum"
+---
+
 # Regras específicas — Go
 
 Aplique junto com `universal.md`.

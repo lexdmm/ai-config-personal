@@ -13,6 +13,10 @@ para Claude Code e Codex CLI.
   nativo a config global), qualquer projeto novo em `~/development/<repo>/`
   já herda essas instruções automaticamente — não precisa referenciar nada
   manualmente por projeto.
+- Para o Claude Code, `setup.sh` também faz `~/.claude/rules` apontar para
+  `rules/`. Assim, os critérios universais entram no contexto pelo mecanismo
+  nativo do Claude, enquanto as regras de stack são carregadas somente quando
+  os caminhos declarados no frontmatter forem relevantes.
 - `skills/` é a fonte neutra das skills reutilizáveis pelo Claude Code e pelo
   Codex. `setup.sh` expõe a mesma fonte em `~/.claude/skills` e linka cada skill
   em `~/.agents/skills`, o diretório pessoal oficial do Codex. Também mantém
@@ -26,11 +30,13 @@ para Claude Code e Codex CLI.
   regra obrigatória, não como exemplo:
   - `rules/universal.md` — critérios universais (Definition of Done,
     severidade/prioridade, segurança, multi-tenancy, testes, performance,
-    catálogo de padrões arquiteturais etc.). O `AGENTS.md` instrui os agentes
-    a lê-lo integralmente antes de revisar, sugerir ou gerar código.
+    catálogo de padrões arquiteturais etc.). No Claude, o arquivo é carregado
+    como regra global; no Codex, o `AGENTS.md` exige sua leitura integral antes
+    de revisar, sugerir ou gerar código.
   - `rules/typescript-react-nestjs.md`, `rules/go.md`, `rules/php-laravel.md`
-    — regras adicionais por stack. O `AGENTS.md` instrui os agentes a detectar
-    as tecnologias presentes e ler somente os arquivos correspondentes.
+    — regras adicionais por stack. O Claude usa o escopo de caminhos declarado
+    em cada arquivo, e o Codex detecta as tecnologias presentes conforme as
+    instruções do `AGENTS.md`.
 - `skills/code-review/` concentra o processo e o checklist de code
   review, com arquivo, linha comentável do diff e texto pronto para o GitHub.
   A skill é carregada automaticamente quando o pedido for um code review e pode
