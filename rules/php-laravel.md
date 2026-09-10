@@ -20,6 +20,16 @@ Aplique junto com `universal.md`.
 - Evitar suprimir erro com `@`.
 - Evitar `mixed` sem justificativa clara.
 
+### Enums
+
+- Manter subconjuntos e agrupamentos semânticos de casos dentro da própria enum,
+  usando método ou constante com nome de domínio. Consumidores devem consultar
+  essa definição em vez de repetir arrays posicionais de casos, evitando fontes
+  de verdade divergentes.
+- Não tratar como agrupamento de domínio arrays associativos de payload,
+  bindings que misturam outras expressões ou referências isoladas a um único
+  caso; nesses cenários, manter a estrutura no contexto que a consome.
+
 ### PHPDoc
 
 - Tipos nativos são a fonte principal do contrato. Use PHPDoc somente para

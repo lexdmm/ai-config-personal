@@ -26,17 +26,22 @@ para Claude Code e Codex CLI.
   quando aplicável.
 - `claude/agents/` e `claude/commands/` guardam subagents e comandos específicos
   do Claude Code e são linkados em `~/.claude/{agents,commands}`.
-- `rules/` guarda os critérios de aceite técnico (code review) usados como
-  regra obrigatória, não como exemplo:
-  - `rules/universal.md` — critérios universais (Definition of Done,
-    severidade/prioridade, segurança, multi-tenancy, testes, performance,
-    catálogo de padrões arquiteturais etc.). No Claude, o arquivo é carregado
-    como regra global; no Codex, o `AGENTS.md` exige sua leitura integral antes
-    de revisar, sugerir ou gerar código.
+- `hooks/` contém o gate de etapa compartilhado. O instalador registra os eventos
+  `UserPromptSubmit` e `Stop` nas configurações do Claude e do Codex sem remover
+  hooks ou preferências já existentes.
+- `rules/` guarda o núcleo universal e os critérios adicionais de stack usados
+  como regras obrigatórias, não como exemplos:
+  - `rules/universal.md` — núcleo conciso carregado globalmente, com os critérios
+    permanentes e o roteamento obrigatório por assunto;
   - `rules/typescript-react-nestjs.md`, `rules/go.md`, `rules/php-laravel.md`
     — regras adicionais por stack. O Claude usa o escopo de caminhos declarado
     em cada arquivo, e o Codex detecta as tecnologias presentes conforme as
     instruções do `AGENTS.md`.
+- `references/technical-acceptance/catalog.md` preserva integralmente o catálogo
+  universal detalhado. Antes de atuar, Claude e Codex leem somente as seções
+  exigidas pelo roteamento do núcleo, incluindo todas quando o escopo realmente
+  atravessar todos os assuntos. Essa seleção reduz contexto sem transformar
+  critérios aplicáveis em opcionais.
 - `skills/code-review/` concentra o processo e o checklist de code
   review, com arquivo, linha comentável do diff e texto pronto para o GitHub.
   A skill é carregada automaticamente quando o pedido for um code review e pode
@@ -66,8 +71,9 @@ Para conferir a instalação sem alterar arquivos ou links:
 ```
 
 O script retorna erro quando encontra um arquivo real em conflito, um link
-incorreto ou uma skill órfã. Esses conflitos precisam ser resolvidos
-manualmente; o instalador não remove conteúdo automaticamente.
+incorreto, uma skill órfã ou JSON inválido. Esses conflitos precisam ser
+resolvidos manualmente; o instalador não remove conteúdo automaticamente. Ao
+configurar os hooks, ele preserva as demais preferências existentes.
 
 Como esses caminhos globais aceitam apenas um destino, executar `setup.sh` em
 outro repositório de configuração troca o perfil ativo. Revise o destino dos
@@ -85,6 +91,30 @@ Para incluir na mesma validação os symlinks instalados nos diretórios pessoai
 ```bash
 ./validate.sh --installed
 ```
+
+Para executar as verificações mecânicas de uma etapa em um projeto Git, informe
+somente os caminhos alterados naquela etapa ou use `--all` quando todo o estado
+pendente pertencer ao mesmo trabalho:
+
+```bash
+~/development/ai-config-personal/scripts/verify-stage.sh -- caminho/arquivo outro/caminho
+~/development/ai-config-personal/scripts/verify-stage.sh --all
+```
+
+O verificador considera alterações staged, unstaged e arquivos novos não
+ignorados. Ele bloqueia conflitos não resolvidos, espaços inválidos, possíveis
+segredos e comandos comuns de debug sem exibir o conteúdo encontrado. Ao passar,
+registra fora do projeto um comprovante associado ao estado atual. Use
+`--status` para confirmar que nenhuma alteração ocorreu desde a verificação.
+
+Essa checagem é complementar: critérios de arquitetura, segurança, performance,
+testes e demais decisões semânticas continuam obrigatórios conforme `AGENTS.md`
+e `rules/`.
+
+No início de cada turno, o hook registra somente a impressão digital do estado
+Git, sem guardar prompts nem conteúdo dos arquivos. Se o estado mudar, Claude ou
+Codex só poderá encerrar o turno depois de uma verificação válida e posterior à
+mudança. Turnos sem alteração no repositório não são bloqueados.
 
 Editar arquivos já existentes em `AGENTS.md`, `skills/` ou `claude/` reflete
 nas sessões novas sem precisar copiar nada. Ao criar ou remover uma skill, rode
@@ -112,7 +142,8 @@ Se um repo precisar de instruções próprias, crie `AGENTS.md` para o Codex e
 local, um deles pode ser um symlink relativo para o outro. Cada agente combina
 automaticamente suas instruções globais com o arquivo correspondente do projeto.
 
-As regras universais e as regras específicas de TypeScript/React/NestJS, Go ou
-PHP/Laravel são selecionadas pelas instruções globais conforme as tecnologias
-presentes. O arquivo do projeto só precisa registrar particularidades da sua
-arquitetura, domínio, comandos ou convenções locais.
+O núcleo universal, os módulos detalhados aplicáveis e as regras específicas de
+TypeScript/React/NestJS, Go ou PHP/Laravel são selecionados pelas instruções
+globais conforme o escopo e as tecnologias presentes. O arquivo do projeto só
+precisa registrar particularidades da sua arquitetura, domínio, comandos ou
+convenções locais.

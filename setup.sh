@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Creates symlinks from this repository to the global Claude Code and Codex CLI configuration.
-# Idempotent: safe to run repeatedly. It neither overwrites regular files nor
-# removes orphaned links automatically.
+# Links this repository to the global Claude Code and Codex CLI configuration.
+# The operation is idempotent, preserves existing JSON settings, and never
+# removes conflicting real files or orphaned links automatically.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -100,6 +100,17 @@ link "$ROOT/rules" "$HOME/.claude/rules"
 link "$ROOT/skills" "$HOME/.claude/skills"
 link "$ROOT/claude/agents" "$HOME/.claude/agents"
 link "$ROOT/claude/commands" "$HOME/.claude/commands"
+link "$ROOT/hooks/stage-gate.sh" "$HOME/.claude/hooks/ai-config-stage-gate.sh"
+link "$ROOT/hooks/stage-gate.sh" "$HOME/.codex/hooks/ai-config-stage-gate.sh"
+
+if [ "$(readlink "$HOME/.claude/hooks/ai-config-stage-gate.sh" 2>/dev/null)" != "$ROOT/hooks/stage-gate.sh" ] ||
+   [ "$(readlink "$HOME/.codex/hooks/ai-config-stage-gate.sh" 2>/dev/null)" != "$ROOT/hooks/stage-gate.sh" ]; then
+  report_error "os hooks não foram configurados porque seus links estão inválidos."
+elif [ "$MODE" = "check" ]; then
+  "$ROOT/scripts/configure-hooks.sh" --check || report_error "configuração de hooks inválida."
+else
+  "$ROOT/scripts/configure-hooks.sh" || report_error "não foi possível configurar os hooks."
+fi
 
 # Link shared skills individually to preserve unrelated skills in each agent's
 # personal directory.

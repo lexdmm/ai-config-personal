@@ -75,7 +75,11 @@ Preencha as seções abaixo aos poucos; deixe vazio o que ainda não se aplica.
   4. reabrir somente as seções das regras e dos documentos relacionadas aos
      arquivos, camadas, fluxos e riscos efetivamente tocados;
   5. confrontar essas regras com as linhas reais alteradas e corrigir qualquer
-     violação antes de apresentar a etapa como concluída.
+     violação antes de apresentar a etapa como concluída;
+  6. executar
+     `~/development/ai-config-personal/scripts/verify-stage.sh -- <caminhos>`
+     apenas para os arquivos da etapa, usando `--all` somente quando todas as
+     alterações pendentes pertencerem ao mesmo trabalho.
 - Quando não houver repositório Git, fazer a mesma conferência diretamente nos
   arquivos alterados. Ter lido uma regra no começo da sessão ou conseguir
   citá-la de memória não substitui confrontá-la com o resultado atual.
@@ -129,48 +133,13 @@ Preencha as seções abaixo aos poucos; deixe vazio o que ainda não se aplica.
 
 ### Relato de pendências técnicas (review, auditoria, pendências)
 
-- Ao reportar problemas encontrados em código — review, auditoria de branch ou
-  retomada de documento de pendências — usar uma única seção chamada
-  **Pendências técnicas**, sem separar os itens por natureza.
-- Classificar cada pendência como:
-  - **BUG CONFIRMADO:** comportamento incorreto ou violação de contrato
-    comprovados no fluxo relevante;
-  - **PROBLEMA TÉCNICO:** problema concreto de arquitetura, manutenção, testes,
-    documentação, performance ou qualidade sem comportamento funcional
-    incorreto comprovado.
-- Não chamar uma hipótese de bug. Quando faltar evidência para confirmar o
-  comportamento ou a causa, declarar a limitação fora da lista de pendências.
-- Apresentar cada pendência em um bloco sem marcador ou numeração. Na primeira
-  linha, usar `**Problema encontrado — NATUREZA (PRIORIDADE):**`, seguido do link
-  para `Arquivo.ext:linha`, e terminar a linha com `\` para forçar a quebra.
-- Na linha seguinte, reunir em um único parágrafo o comportamento observado, o
-  impacto concreto e a correção necessária, nessa ordem. Não criar o subtítulo
-  **Impacto e correção**.
-- Separar blocos consecutivos com uma linha em branco.
-- Ordenar as pendências por prioridade (`P0`, `P1`, `P2`, `P3`). Não incluir
-  veredito, pontos aprovados, categorias vazias, elogios ou resumo final.
-- Escrever como uma orientação técnica entre desenvolvedores: linguagem natural,
-  respeitosa e objetiva, sempre sobre o código, sem julgar ou atribuir intenção
-  ao autor. Explicar o contexto mínimo necessário sem soar burocrático ou seco.
-- Para bug confirmado, indicar a mudança necessária com clareza, preferindo
-  `Para corrigir`. Para problema técnico, calibrar a orientação conforme a
-  prioridade, sem transformar correção necessária em sugestão opcional.
-- Evitar sarcasmo, ironia, acusações, perguntas retóricas, elogios artificiais,
-  dramatização e expressões como `obviamente`, `simplesmente`, `foi feito errado`,
-  `o autor esqueceu`, `seria legal` ou `de repente`.
-- Se não houver pendências, responder apenas `Nenhuma pendência técnica encontrada.`
-
-Modelo:
-
-```text
-## Pendências técnicas
-
-**Problema encontrado — BUG CONFIRMADO (P1):** [Arquivo.ext:123](/caminho/absoluto/Arquivo.ext:123)\
-Nesse ponto, <comportamento comprovado>. Com isso, <impacto concreto>. Para corrigir, <ação necessária>.
-
-**Problema encontrado — PROBLEMA TÉCNICO (P2):** [OutroArquivo.ext:45](/caminho/absoluto/OutroArquivo.ext:45)\
-Aqui, <problema concreto sem bug comprovado>. Isso <impacto atual ou futuro>. Nesse caso, <ajuste recomendado ou necessário>.
-```
+- Ao reportar problemas em review, auditoria ou retomada de pendências, aplicar
+  integralmente a seção `Formato obrigatório de resposta do review` do catálogo
+  técnico e a seção `Resposta` da skill de code review aplicável.
+- Essas fontes preservam a classificação entre bug confirmado e problema
+  técnico, prioridades, evidência, estrutura dos blocos, linguagem respeitosa e
+  o formato pronto para comentário. Não substituir suas regras por um resumo
+  lembrado nem improvisar outro formato.
 
 ### Projetos que usam Laravel Sail
 
@@ -189,9 +158,16 @@ Aqui, <problema concreto sem bug comprovado>. Isso <impacto atual ou futuro>. Ne
 
 ## Critérios de aceite técnico
 
-Antes de revisar, sugerir ou gerar código, ler e aplicar integralmente
-`~/development/ai-config-personal/rules/universal.md`. Essas regras são critérios de
-aceite obrigatórios, não exemplos opcionais.
+Antes de analisar, revisar, sugerir ou gerar código, ler e aplicar integralmente
+`~/development/ai-config-personal/rules/universal.md`. O arquivo contém o núcleo
+obrigatório e o roteamento para o catálogo detalhado em
+`~/development/ai-config-personal/references/technical-acceptance/catalog.md`.
+
+Identificar todos os módulos aplicáveis pelos arquivos, camadas, fluxos e riscos
+do trabalho e ler integralmente as respectivas seções do catálogo antes de
+atuar. Uma tarefa pode exigir vários módulos; na dúvida razoável, incluir a
+seção. O carregamento seletivo reduz contexto, mas não torna nenhum critério
+aplicável opcional.
 
 Identificar a stack presente no escopo e ler também o arquivo correspondente,
 quando aplicável:
@@ -201,7 +177,8 @@ quando aplicável:
 - Go: `~/development/ai-config-personal/rules/go.md`;
 - PHP ou Laravel: `~/development/ai-config-personal/rules/php-laravel.md`.
 
-Aplicar apenas os arquivos compatíveis com as tecnologias realmente presentes.
+Aplicar apenas os arquivos de stack compatíveis com as tecnologias realmente
+presentes, sem limitar os módulos universais exigidos pelo contexto.
 
 ## Projetos específicos
 

@@ -42,7 +42,13 @@ validate_required_paths() {
     LICENSE
     README.md
     setup.sh
+    scripts/configure-hooks.sh
+    scripts/verify-stage.sh
+    hooks/stage-gate.sh
+    hooks/claude.json
+    hooks/codex.json
     rules/universal.md
+    references/technical-acceptance/catalog.md
     rules/typescript-react-nestjs.md
     rules/go.md
     rules/php-laravel.md
@@ -64,6 +70,32 @@ validate_required_paths() {
   if [ -e "$ROOT/claude/skills" ] || [ -L "$ROOT/claude/skills" ]; then
     fail "alias legado presente: claude/skills; use somente skills/"
   fi
+}
+
+validate_hooks() {
+  local hook_file executable
+
+  if ! command -v jq >/dev/null 2>&1; then
+    fail "jq é obrigatório para validar as definições de hooks."
+    return
+  fi
+
+  for hook_file in "$ROOT/hooks/claude.json" "$ROOT/hooks/codex.json"; do
+    if ! jq -e '.hooks.UserPromptSubmit and .hooks.Stop' "$hook_file" >/dev/null 2>&1; then
+      fail "definição de hooks inválida: ${hook_file#"$ROOT/"}"
+    fi
+  done
+
+  for executable in \
+    "$ROOT/setup.sh" \
+    "$ROOT/validate.sh" \
+    "$ROOT/scripts/configure-hooks.sh" \
+    "$ROOT/scripts/verify-stage.sh" \
+    "$ROOT/hooks/stage-gate.sh"; do
+    if [ ! -x "$executable" ]; then
+      fail "script sem permissão de execução: ${executable#"$ROOT/"}"
+    fi
+  done
 }
 
 validate_publication_safety() {
@@ -125,7 +157,7 @@ validate_shell_scripts() {
     if ! bash -n "$shell_script"; then
       fail "sintaxe Bash inválida: ${shell_script#"$ROOT/"}"
     fi
-  done < <(find "$ROOT" -maxdepth 1 -type f -name '*.sh' -print0)
+  done < <(find "$ROOT" -path "$ROOT/.git" -prune -o -type f -name '*.sh' -print0)
 }
 
 validate_markdown() {
@@ -171,6 +203,49 @@ validate_markdown() {
     }
   ' "$document")"; then
     fail "Markdown inválido em ${document#"$ROOT/"}: ${output//$'\n'/; }"
+  fi
+}
+
+validate_acceptance_catalog() {
+  local catalog="$ROOT/references/technical-acceptance/catalog.md"
+  local heading
+  local required_headings=(
+    '## Propósito e modo de uso'
+    '## Critérios de aplicação e aceite'
+    '### Regras gerais'
+    '#### Comentários no código'
+    '### Arquiteturas e padrões que devem ser considerados'
+    '### Backend — arquitetura e design'
+    '### Multi-tenancy'
+    '### Segurança'
+    '### Autenticação e autorização'
+    '### Transações e consistência'
+    '### Domínio e regras de negócio'
+    '### DTOs, contratos e validação'
+    '### Banco de dados'
+    '### Event bus, filas e workers'
+    '### Storage e arquivos'
+    '### Logging e observabilidade'
+    '### Configuração e ambiente'
+    '### Erros e exceptions'
+    '### Testes'
+    '### Performance e escalabilidade'
+    '### Integrações externas'
+    '### Documentação e manutenção'
+    '### CI/CD, qualidade e entrega'
+    '## Formato obrigatório de resposta do review'
+    '## Pendências técnicas'
+  )
+
+  for heading in "${required_headings[@]}"; do
+    if ! grep -Fqx "$heading" "$catalog"; then
+      fail "seção obrigatória ausente no catálogo técnico: $heading"
+    fi
+  done
+
+  if ! grep -Fq 'references/technical-acceptance/catalog.md' \
+    "$ROOT/rules/universal.md"; then
+    fail "o núcleo universal não referencia o catálogo técnico"
   fi
 }
 
@@ -256,7 +331,9 @@ validate_skills() {
 validate_required_paths
 validate_publication_safety
 validate_shell_scripts
+validate_hooks
 validate_markdown_files
+validate_acceptance_catalog
 validate_skills
 
 if [ "$CHECK_INSTALLED" = true ]; then
@@ -270,4 +347,4 @@ if [ "$failures" -gt 0 ]; then
   exit 1
 fi
 
-echo "Validação concluída: estrutura, Markdown, skills e segurança de publicação estão corretos."
+echo "Validação concluída: estrutura, Markdown, hooks, skills e segurança de publicação estão corretos."
