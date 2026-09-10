@@ -20,6 +20,18 @@ Preencha as seções abaixo aos poucos; deixe vazio o que ainda não se aplica.
 <!-- Como prefere revisar código, granularidade de commits, uso de testes,
      nível de autonomia esperado do agente, etc. -->
 
+### Comunicação e uso de contexto
+
+- Ser conciso e não repetir o pedido, a mesma constatação, justificativa ou
+  correção em mensagens consecutivas. Uma atualização deve acrescentar
+  informação verificável ou indicar mudança real de estado.
+- Ler e exibir somente os arquivos, trechos e saídas necessários à decisão
+  atual. Não carregar o catálogo completo quando o roteamento permitir seções
+  específicas, nem repetir leituras sem mudança relevante no conteúdo.
+- Evitar elogios automáticos, frases de preenchimento e narração do raciocínio.
+  Informar diretamente o que foi confirmado, o que falta e qual ação está em
+  andamento.
+
 ### Autonomia para comandos git
 
 - Comandos somente leitura (`status`, `diff`, `log`, `show`, `branch --list`,
@@ -103,6 +115,20 @@ Preencha as seções abaixo aos poucos; deixe vazio o que ainda não se aplica.
   responder apenas ao escopo solicitado e priorizar as orientações específicas
   dadas pelo usuário na conversa.
 
+### Escopo de execução em code review
+
+- Todo code review deve ser exclusivamente uma análise estática e somente
+  leitura do código, do diff, dos contratos e do fluxo relevante.
+- Durante um code review, usar apenas comandos de leitura necessários para
+  localizar e inspecionar repositório, histórico, arquivos e referências. Não
+  executar aplicação, testes, builds, linters, formatadores, analisadores
+  estáticos, migrations, chamadas HTTP, consultas a banco ou logs, fluxos no
+  navegador nem instrumentação.
+- Avaliar a qualidade e a cobertura dos testes pelo código dos próprios testes,
+  sem executá-los. Quando o código e o fluxo disponível não bastarem para
+  comprovar uma conclusão, declarar a limitação e a evidência faltante; não
+  ampliar o review para uma tarefa de validação dinâmica.
+
 ### Validação obrigatória de análises técnicas
 
 - Nunca concluir que um bug existe, que uma causa procede ou que uma mudança
@@ -112,10 +138,10 @@ Preencha as seções abaixo aos poucos; deixe vazio o que ainda não se aplica.
 - Antes de reportar um achado, rastrear no código o fluxo completo relevante,
   incluindo origem dos dados, estados, contratos, chamadas externas, tratamento
   de sucesso e falha e diferenças entre a base e a alteração analisada.
-- Quando a inspeção estática não for suficiente, executar a validação mais
-  aderente e segura disponível, como teste automatizado, reprodução controlada,
-  chamada HTTP, consulta, logs ou instrumentação temporária, sem apresentar
-  hipótese como fato confirmado.
+- Fora de code review, quando a inspeção estática não for suficiente, executar a
+  validação mais aderente e segura disponível, como teste automatizado,
+  reprodução controlada, chamada HTTP, consulta, logs ou instrumentação
+  temporária, sem apresentar hipótese como fato confirmado.
 - Se não for possível validar uma camada necessária, declarar objetivamente a
   limitação, separar sintoma confirmado de causa não comprovada e informar qual
   evidência falta; não registrar o caso como bug confirmado nem atribuir autoria

@@ -105,6 +105,11 @@ Prefira:
 
 Se a evidência não estiver disponível, marque a conclusão como hipótese e informe o que falta para confirmar.
 
+Em code review, obtenha essa evidência exclusivamente pela inspeção estática do
+código, do diff, dos contratos e do fluxo relevante. Não execute testes nem
+outras validações dinâmicas para confirmar achados; quando a inspeção não bastar,
+declare a limitação e a evidência faltante.
+
 ### Preferência por patch mínimo
 
 Prefira a menor alteração correta.

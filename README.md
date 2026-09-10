@@ -42,8 +42,9 @@ para Claude Code e Codex CLI.
   exigidas pelo roteamento do núcleo, incluindo todas quando o escopo realmente
   atravessar todos os assuntos. Essa seleção reduz contexto sem transformar
   critérios aplicáveis em opcionais.
-- `skills/code-review/` concentra o processo e o checklist de code
-  review, com arquivo, linha comentável do diff e texto pronto para o GitHub.
+- `skills/code-review/` concentra a análise estática e somente leitura de code
+  review, sem executar testes ou outras validações dinâmicas, com arquivo, linha
+  comentável do diff e texto pronto para o GitHub.
   A skill é carregada automaticamente quando o pedido for um code review e pode
   ser chamada explicitamente como `/code-review` no Claude ou
   `$code-review` no Codex.

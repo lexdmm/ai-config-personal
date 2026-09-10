@@ -1,6 +1,6 @@
 ---
 name: code-review
-description: "Revisa somente o código alterado em PRs, branches, commits ou diffs e entrega achados priorizados com arquivo, linha comentável e texto pronto para o GitHub. Use automaticamente quando o usuário pedir code review, revisão de PR ou revisão de branch; não use para pedidos de implementação ou correção sem revisão."
+description: "Faz análise estática somente leitura do código alterado em PRs, branches, commits ou diffs e entrega achados priorizados com arquivo, linha comentável e texto pronto para o GitHub. Use automaticamente quando o usuário pedir code review, revisão de PR ou revisão de branch; não use para testes, validação dinâmica, implementação ou correção."
 ---
 
 # Code Review
@@ -9,8 +9,8 @@ Faça uma revisão somente leitura, seguindo as instruções globais e do projet
 
 ## Delimitação
 
-1. Identifique a PR ou branch, o escopo funcional, eventuais restrições de
-   arquivos e a decisão do usuário sobre executar testes.
+1. Identifique a PR ou branch, o escopo funcional e eventuais restrições de
+   arquivos.
 2. Confirme o repositório, a branch atual e a base declarada pelo usuário.
 3. Compare exatamente contra essa base e inclua alterações commitadas, staged e
    unstaged que pertençam à tarefa.
@@ -20,6 +20,13 @@ Faça uma revisão somente leitura, seguindo as instruções globais e do projet
 5. Não altere código durante um pedido apenas de review.
 
 Prefira comandos `git` somente leitura para descobrir histórico e diff. Nunca faça checkout, merge, rebase, reset, commit ou push sem autorização explícita para aquele comando.
+
+O review é exclusivamente estático. Use somente comandos de leitura para
+inspecionar código, diff, histórico e documentação. Não execute aplicação,
+testes, builds, linters, formatadores, analisadores estáticos, migrations,
+chamadas HTTP, consultas a banco ou logs, fluxos no navegador nem instrumentação.
+Se a inspeção do código e do fluxo não comprovar uma conclusão, declare a
+limitação e a evidência faltante sem transformar o review em validação dinâmica.
 
 ## Revisão
 
@@ -50,10 +57,9 @@ Antes de concluir:
   necessários, mascaramento seguro de `403`/`404` e consistência com OpenAPI.
 - Revise comentários e PHPDoc: remova descrição óbvia ou redundante e mantenha
   apenas o motivo de decisões, invariantes e comportamentos não evidentes.
-- Confira testes dos caminhos feliz, inválidos, vazios, limites, isolamento,
-  autorização, concorrência e custo de queries conforme o risco da mudança. Se
-  o usuário disser que outra pessoa já executou testes, Pint ou PHPStan, não os
-  repita sem necessidade; ainda assim, revise a qualidade e a cobertura.
+- Inspecione no código dos testes a cobertura dos caminhos feliz, inválidos,
+  vazios, limites, isolamento, autorização, concorrência e custo de queries
+  conforme o risco da mudança, sem executar a suíte ou outras ferramentas.
 - Se o projeto usar `CODEOWNERS`, confira arquivos novos ou caminhos ainda sem
   cobertura e siga a organização e os responsáveis já adotados no repositório;
   não invente equipes, rótulos ou agrupamentos.

@@ -109,6 +109,8 @@ Leia no catálogo todas as seções indicadas pelos gatilhos aplicáveis:
 - Teste comportamento e riscos relevantes, incluindo erros, contratos,
   autorização, isolamento, regressões e efeitos colaterais; não use mocks que
   tornem a prova vazia.
+- Em code review, avalie esses testes e riscos somente pela inspeção estática do
+  código e do fluxo; não execute testes nem outras validações dinâmicas.
 - Comentários incorporados ao código devem ser em inglês e existir somente
   quando preservarem uma razão ou restrição que o próprio código não consegue
   expressar.
